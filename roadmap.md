@@ -1,0 +1,3 @@
+- [x] Create the portfolio design system and editable content.
+- [ ] Build the responsive portfolio sections and navigation.
+- [ ] Verify desktop/mobile layout and contact interactions.
