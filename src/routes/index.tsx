@@ -74,7 +74,7 @@ function Header({ scrolled, active }: { scrolled: boolean; active: string }) {
     <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
       <nav aria-label="Main navigation" className="section-wrap nav-shell flex h-[66px] items-center justify-between rounded-md px-4 sm:px-6">
         <a href="#top" className="font-display flex items-center gap-2.5 text-xl font-bold text-foreground" aria-label="Sujal, back to top" onClick={() => setOpen(false)}>
-          <span className="grid size-9 place-items-center rounded-sm border border-primary/30 bg-primary/10 text-primary">S<span className="text-mint">.</span></span>
+          <span className="grid size-9 place-items-center rounded-sm border border-primary/30 bg-primary/10 text-primary"><span>S<span className="text-mint">.</span></span></span>
           <span>Sujal<span className="text-mint">.</span></span>
         </a>
         <div className="hidden items-center gap-8 lg:flex">
