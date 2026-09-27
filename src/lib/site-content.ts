@@ -1,11 +1,16 @@
-// Replace these placeholders with Sujal's real contact details and profile URLs.
-export const CONTACT_EMAIL = "sujaldev@example.com";
+// Add the exact business email when supplied. An empty value opens a blank email draft without inventing an address.
+export const CONTACT_EMAIL = "";
+// Add the supplied portrait asset URL here when available. Leave empty to display the circular photo placeholder.
+export const PROFILE_PHOTO = "";
 
+// Platform homepages are placeholders, not personal profiles. Replace with actual profile URLs when supplied.
+// Optional LinkedIn and X only appear once their URLs are added.
 export const SOCIAL_LINKS = [
-  { name: "Instagram", url: "https://www.instagram.com/", short: "IG" },
-  { name: "LinkedIn", url: "https://www.linkedin.com/", short: "IN" },
-  { name: "GitHub", url: "https://github.com/", short: "GH" },
-  { name: "X", url: "https://x.com/", short: "X" },
+  { name: "GitHub", url: "https://github.com/" },
+  { name: "Instagram", url: "https://www.instagram.com/" },
+  { name: "Facebook", url: "https://www.facebook.com/" },
+  { name: "LinkedIn", url: "" },
+  { name: "X", url: "" },
 ];
 
 export const NAV_ITEMS = [
@@ -37,8 +42,6 @@ export const PROCESS = [
   { number: "03", title: "Build", description: "I turn the design into a responsive, functional website." },
   { number: "04", title: "Launch", description: "We review the final details and get your website ready to share." },
 ];
-
-export const SKILLS = ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS", "GitHub", "Netlify", "Supabase"];
 
 export const BENEFITS = [
   { number: "01", title: "Design with intention", description: "Clear layouts and thoughtful details, not a one-size-fits-all page." },
