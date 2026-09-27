@@ -1,3 +1,6 @@
 - [x] Create the portfolio design system and editable content.
 - [x] Build the responsive portfolio sections and navigation.
 - [x] Verify desktop/mobile layout and contact interactions.
+- [x] Remove technology claims and prepare a circular portrait slot.
+- [x] Update SD Infotech contact and social buttons with editable destinations.
+- [ ] Add Sujal's actual portrait, business email, and profile URLs when supplied.
