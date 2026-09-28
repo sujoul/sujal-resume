@@ -1,51 +1,38 @@
-// Add the exact business email when supplied. An empty value opens a blank email draft without inventing an address.
-export const CONTACT_EMAIL = "";
-// Add the supplied portrait asset URL here when available. Leave empty to display the circular photo placeholder.
-export const PROFILE_PHOTO = "";
+export const BRAND = "SD Infotech";
+export const CONTACT_EMAIL = "SDinfotech.indian@gmail.com";
 
-// Platform homepages are placeholders, not personal profiles. Replace with actual profile URLs when supplied.
-// Optional LinkedIn and X only appear once their URLs are added.
 export const SOCIAL_LINKS = [
-  { name: "GitHub", url: "https://github.com/" },
-  { name: "Instagram", url: "https://www.instagram.com/" },
-  { name: "Facebook", url: "https://www.facebook.com/" },
-  { name: "LinkedIn", url: "" },
-  { name: "X", url: "" },
-];
+  { name: "Instagram", url: "https://www.instagram.com/i.am__sujal?stkn=MTgxbGNkZ3dvZHM1dw==", icon: "instagram" },
+  { name: "YouTube", url: "https://youtube.com/@sujal_vlogs_official-og?si=oPcUiTfuTw68PaJ9", icon: "youtube" },
+  { name: "X", url: "https://x.com/SD_infotech9", icon: "x" },
+  { name: "GitHub", url: "https://github.com/sujoul", icon: "github" },
+  { name: "Facebook", url: "https://www.facebook.com/share/1crSJ44xX8/", icon: "facebook" },
+] as const;
 
 export const NAV_ITEMS = [
-  { label: "About", id: "about" },
-  { label: "Services", id: "services" },
-  { label: "Work", id: "work" },
-  { label: "Process", id: "process" },
+  { label: "Story", id: "story" },
+  { label: "Timeline", id: "timeline" },
+  { label: "Album", id: "album" },
+  { label: "Web work", id: "work" },
   { label: "Contact", id: "contact" },
-];
-
-export const SERVICES = [
-  { number: "01", icon: "globe", title: "Business websites", description: "A clear, professional online home for your business, with the pages and details your customers need." },
-  { number: "02", icon: "layout", title: "Landing pages", description: "Focused pages built around one idea, offer, or campaign with a clear path to get in touch." },
-  { number: "03", icon: "user", title: "Personal portfolios", description: "A distinctive space to show your work, tell your story, and make a memorable first impression." },
-  { number: "04", icon: "code", title: "Webpages & custom UI", description: "Thoughtful page layouts and tailored interfaces designed around your content and goals." },
-  { number: "05", icon: "phone", title: "Responsive design", description: "Layouts carefully adapted for phones, tablets, and desktops so every visitor feels at home." },
-  { number: "06", icon: "search", title: "SEO-ready structure", description: "Semantic headings, descriptive page details, and a solid technical starting point for discoverability." },
-];
+] as const;
 
 export const PROJECTS = [
-  { number: "01", name: "SDcart", category: "E-commerce practice project", description: "An exploration of online shopping experiences, from product discovery to a clean storefront interface.", tags: ["E-commerce", "UI design", "Practice project"], theme: "store" },
-  { number: "02", name: "Barber Shop Website", category: "Business website concept", description: "A bold digital presence concept for a local barbershop, shaped around services and easy contact.", tags: ["Business site", "Responsive", "Concept"], theme: "barber" },
-  { number: "03", name: "Developer Portfolio", category: "Personal portfolio concept", description: "A considered portfolio concept that brings personality, projects, and a clear introduction together.", tags: ["Portfolio", "Web design", "Concept"], theme: "portfolio" },
-];
+  { number: "01", name: "SDcart", category: "E-commerce practice project", description: "A practical exploration of a clear storefront journey, from browsing products to a focused shopping experience.", theme: "store" },
+  { number: "02", name: "Barber Shop Website", category: "Business website concept", description: "A strong, service-led online presence concept shaped for a local barbershop and easy customer contact.", theme: "barber" },
+  { number: "03", name: "Developer Portfolio", category: "Personal portfolio concept", description: "A personal presentation concept balancing identity, project stories, and a direct path to connect.", theme: "portfolio" },
+] as const;
 
-export const PROCESS = [
-  { number: "01", title: "Discuss", description: "We talk through your idea, audience, content, and what the website needs to do." },
-  { number: "02", title: "Design", description: "I shape a visual direction and page structure that fits your goals." },
-  { number: "03", title: "Build", description: "I turn the design into a responsive, functional website." },
-  { number: "04", title: "Launch", description: "We review the final details and get your website ready to share." },
-];
+export const MEMORY_PLACEHOLDERS = [
+  { title: "Beach memory", caption: "First time on the beach.", kind: "beach" },
+  { title: "Gym memory", caption: "Showing up, one session at a time.", kind: "gym" },
+  { title: "Travel memory", caption: "A pause along the journey.", kind: "temple" },
+  { title: "Work memory", caption: "A day at ITC — learning on the job.", kind: "work" },
+] as const;
 
-export const BENEFITS = [
-  { number: "01", title: "Design with intention", description: "Clear layouts and thoughtful details, not a one-size-fits-all page." },
-  { number: "02", title: "Made for every screen", description: "A consistent experience whether someone visits on a phone or desktop." },
-  { number: "03", title: "A collaborative approach", description: "Open communication and room to shape the website around your needs." },
-  { number: "04", title: "Built around your scope", description: "Project-based work that can be tailored to what you actually need." },
-];
+export const FALLBACK_JOURNEY = [
+  { id: "education", title: "A foundation in computer applications", summary: "B.C.A. became part of the foundation for understanding digital work with more depth and intention.", date_label: "Education", location: "", details: "Studying while continuing to build practical experience.", sort_order: 1, published: true },
+  { id: "practice", title: "Ideas became practical web projects", summary: "Personal concepts and practice projects became a way to turn curiosity into useful, well-considered digital experiences.", date_label: "Building", location: "", details: "Modern websites, webpages, landing pages, portfolios, and small-business websites.", sort_order: 2, published: true },
+  { id: "present", title: "Building SD Infotech", summary: "Today, the focus is on professional-level web development and thoughtful project-based work while continuing to learn.", date_label: "Now", location: "", details: "Pricing depends on the deal/project work.", sort_order: 3, published: true },
+  { id: "future", title: "A future shaped through meaningful work", summary: "The direction ahead is simple: keep learning, create honest work, and build digital experiences that feel personal and useful.", date_label: "Next", location: "", details: "No shortcuts—just a journey that continues to take shape.", sort_order: 4, published: true },
+] as const;
