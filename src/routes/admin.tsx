@@ -75,7 +75,7 @@ function Admin() {
   }
   async function submitJourney(event: FormEvent) {
     event.preventDefault(); setBusy(true); setMessage("");
-    try { await saveJourney(editJourney, journeyForm); await refresh(); setEditJourney(null); setJourneyForm(blankJourney); setMessage("Journey entry saved."); }
+    try { await saveJourney(editJourney === "new" ? null : editJourney, journeyForm); await refresh(); setEditJourney(null); setJourneyForm(blankJourney); setMessage("Journey entry saved."); }
     catch (err) { setMessage(errorText(err)); } finally { setBusy(false); }
   }
   async function submitMedia(event: FormEvent) {
@@ -85,7 +85,7 @@ function Admin() {
       if (file) newPath = await uploadMedia(file, setProgress);
       const draft = { ...mediaForm, storage_path: newPath || mediaForm.storage_path, media_type: file ? file.type.startsWith("video/") ? "video" : "image" : mediaForm.media_type };
       if (!draft.storage_path && !draft.external_url) throw new Error("Choose a photo or video before saving.");
-      await saveMedia(editMedia, draft); await refresh(); setEditMedia(null); setMediaForm(blankMedia); setFile(null); setProgress(0); setMessage("Media saved.");
+      await saveMedia(editMedia === "new" ? null : editMedia, draft); await refresh(); setEditMedia(null); setMediaForm(blankMedia); setFile(null); setProgress(0); setMessage("Media saved.");
     } catch (err) {
       if (newPath) await supabase.storage.from("journey-media").remove([newPath]);
       setMessage(errorText(err));
