@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, GraduationCap, Mail, MapPin, Menu, Sparkles, X } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, GraduationCap, Mail, Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform-icon";
 import { getPublishedPortfolio, type JourneyEntry, type MediaItem } from "@/lib/portfolio-data";
@@ -28,6 +28,13 @@ function useJourneyMotion() {
       const available = document.documentElement.scrollHeight - innerHeight;
       setScrolled(scrollY > 30);
       setProgress(available > 0 ? scrollY / available : 0);
+      const profile = document.querySelector<HTMLElement>(".profile-orbit");
+      if (profile) {
+        const album = document.getElementById("album");
+        const rect = album?.getBoundingClientRect();
+        const travel = rect ? Math.max(0, Math.min(1, (innerHeight - rect.top) / Math.max(rect.height, 1))) : 0;
+        profile.style.setProperty("--profile-travel", String(travel));
+      }
     };
     update(); addEventListener("scroll", update, { passive: true });
     const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("visible")), { threshold: .08 });
@@ -110,14 +117,14 @@ function Index() {
 
       <section id="album" className="album-band scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="03 / Photo journey" title="Fragments of one unfolding life." copy="Travel, work, discipline, and ordinary moments—the photographs can change, but their place in the journey remains connected." />
         <div className="album-grid">{album.length ? album.map((item, index) => <article key={item.id} className={`memory-card reveal ${index % 3 === 1 ? "memory-tall" : ""}`}>{item.media_type === "video" ? <video src={urls[item.id]} controls preload="metadata" aria-label={item.alt_text || item.title} /> : <img src={urls[item.id]} alt={item.alt_text || item.title} loading="lazy" />}<div className="memory-caption"><span>{item.date_label || item.location || `Memory ${index + 1}`}</span><p>{item.caption || item.title}</p></div></article>) : MEMORY_PLACEHOLDERS.map((item, index) => <MemoryPlaceholder key={item.title} item={item} index={index} />)}</div>
-        <div className="profile-journey reveal"><div className="profile-orbit"><div className="profile-circle">{profile && urls[profile.id] ? <img src={urls[profile.id]} alt={profile.alt_text || "Sujal in a lavender jacket"} /> : <span>S</span>}</div></div><div><p className="section-kicker">Portrait / The person within the album</p><h3>The story keeps moving.</h3><p>{profile ? profile.caption : "The lavender-jacket portrait will appear here after it is uploaded in the admin panel."}</p></div></div>
+         <div className="profile-journey reveal"><div className="profile-orbit"><div className="profile-circle">{profile && urls[profile.id] ? <img src={urls[profile.id]} alt={profile.alt_text || "Portrait of Sujal"} loading="lazy" /> : <span>S</span>}</div></div><div><p className="section-kicker">Portrait / The person within the album</p><h3>The story keeps moving.</h3><p>{profile ? profile.caption : "A portrait will complete this part of the journey soon."}</p></div></div>
       </div></section>
 
       <section id="work" className="section-rule scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="04 / Web work" title="Ideas turned into practical digital work." copy="These examples are practice projects and concepts, presented honestly—not as commissioned client work." /><div className="project-grid">{PROJECTS.map(project => <article key={project.name} className="project-card reveal"><ProjectVisual theme={project.theme} /><div className="p-6"><p className="section-kicker">{project.number} · {project.category}</p><h3 className="mt-4 font-display text-2xl font-semibold">{project.name}</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">{project.description}</p></div></article>)}</div><div className="work-note reveal"><span>Project pricing</span><strong>Depends on the deal/project work.</strong></div></div></section>
 
-      <section id="contact" className="contact-band scroll-mt-24"><div className="section-wrap section-space contact-grid"><div><p className="section-kicker">05 / Start a conversation</p><h2 className="section-heading mt-6">Have a website in mind?<br /><span className="text-gradient">Let’s shape the next chapter.</span></h2><p className="mt-6 max-w-lg leading-8 text-muted-foreground">For websites, webpages, landing pages, portfolios, and small-business projects, reach SD Infotech directly by email.</p><Button asChild variant="hero" size="hero" className="mt-8"><a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Project inquiry — SD Infotech")}`}><Mail /> Email SD Infotech</a></Button></div><div className="social-panel"><span>Elsewhere in the journey</span>{SOCIAL_LINKS.map(link => <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="social-link"><PlatformIcon platform={link.icon} className="size-5" /><span>{link.name}</span><ArrowUpRight /></a>)}</div></div></section>
+       <section id="contact" className="contact-band scroll-mt-24"><div className="section-wrap section-space contact-grid"><div><p className="section-kicker">05 / Start a conversation</p><h2 className="section-heading mt-6">Have a website in mind?<br /><span className="text-gradient">Let’s shape the next chapter.</span></h2><p className="mt-6 max-w-lg leading-8 text-muted-foreground">For websites, webpages, landing pages, portfolios, and small-business projects, reach SD Infotech directly by email.</p><Button asChild variant="hero" size="hero" className="mt-8"><a href={`mailto:${CONTACT_EMAIL}`}><Mail /> Email SD Infotech</a></Button></div><div className="text-center md:text-left"><p className="section-kicker">Direct contact</p><a className="mt-5 inline-block font-display text-lg text-primary underline-offset-4 hover:underline" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></div></div></section>
     </main>
-    <footer className="section-wrap flex flex-col gap-5 py-9 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><span>© 2026 SD Infotech. All Rights Reserved.</span><a href="/admin" className="text-faint hover:text-foreground">Admin</a></footer>
+    <footer className="section-wrap flex flex-col items-center gap-5 py-10 text-center text-sm text-muted-foreground"><div className="footer-social" aria-label="Social profiles">{SOCIAL_LINKS.map(link => <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.name} title={link.name}><PlatformIcon platform={link.icon} className="size-5" /></a>)}</div><span>© 2026 SD Infotech. All Rights Reserved.</span><a href="/admin" className="text-xs text-muted-foreground hover:text-primary">Admin</a></footer>
     <Button variant="glass" size="icon" className={`back-top fixed right-5 bottom-5 z-50 ${scrolled ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-label="Back to top" onClick={() => scrollTo({ top: 0, behavior: "smooth" })}><ArrowUp /></Button>
   </div>;
 }
