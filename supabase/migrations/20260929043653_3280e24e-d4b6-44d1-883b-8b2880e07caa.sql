@@ -1,0 +1,2 @@
+GRANT INSERT ON public.user_roles TO authenticated;
+CREATE POLICY "Admins can manage uploaded album files" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'journey-media' AND public.has_role(auth.uid(), 'admin'));
