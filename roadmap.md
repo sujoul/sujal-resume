@@ -3,3 +3,5 @@
 - [x] Build the authenticated mobile admin dashboard and owner setup flow.
 - [x] Typecheck/build and visually verify the public album, admin sign-in, interactions, and phone/tablet/desktop layouts.
 - [ ] Owner creates and confirms the intended admin account, then uploads supplied personal photos.
+- [x] Keep every published photo in the album while treating the profile portrait as a separate presentation.
+- [ ] Match the final drag/arrow/swipe interaction to the owner's reference video when supplied.
