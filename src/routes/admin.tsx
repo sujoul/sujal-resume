@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ArrowLeft, ImagePlus, LogOut, Plus, Save, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, ImagePlus, LogOut, Plus, Save, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { getAdminPortfolio, removeJourney, removeMedia, saveJourney, saveMedia, uploadMedia, type JourneyEntry, type MediaItem } from "@/lib/portfolio-data";
+import { getAdminPortfolio, mediaUrl, removeJourney, removeMedia, saveJourney, saveMedia, uploadMedia, type JourneyEntry, type MediaItem } from "@/lib/portfolio-data";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [
@@ -24,6 +24,7 @@ function Admin() {
   const [tab, setTab] = useState<"media" | "journey">("media");
   const [journey, setJourney] = useState<JourneyEntry[]>([]);
   const [media, setMedia] = useState<MediaItem[]>([]);
+  const [mediaUrls, setMediaUrls] = useState<Record<string, string>>({});
   const [editJourney, setEditJourney] = useState<string | null>(null);
   const [editMedia, setEditMedia] = useState<string | null>(null);
   const [journeyForm, setJourneyForm] = useState<JourneyForm>(blankJourney);
@@ -41,6 +42,11 @@ function Admin() {
   const refresh = useCallback(async () => {
     const data = await getAdminPortfolio();
     setJourney(data.journey); setMedia(data.media);
+    const urls = await Promise.all(data.media.map(async item => {
+      const resolved = await mediaUrl(item);
+      return [item.id, typeof resolved === "string" ? resolved : resolved.data?.signedUrl || ""] as const;
+    }));
+    setMediaUrls(Object.fromEntries(urls));
   }, []);
   const check = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -85,7 +91,11 @@ function Admin() {
       if (file) newPath = await uploadMedia(file, setProgress);
       const draft = { ...mediaForm, storage_path: newPath || mediaForm.storage_path, media_type: file ? file.type.startsWith("video/") ? "video" : "image" : mediaForm.media_type };
       if (!draft.storage_path && !draft.external_url) throw new Error("Choose a photo or video before saving.");
-      await saveMedia(editMedia === "new" ? null : editMedia, draft); await refresh(); setEditMedia(null); setMediaForm(blankMedia); setFile(null); setProgress(0); setMessage("Media saved.");
+      await saveMedia(editMedia === "new" ? null : editMedia, draft);
+      if (newPath && mediaForm.storage_path && mediaForm.storage_path !== newPath) {
+        await supabase.storage.from("journey-media").remove([mediaForm.storage_path]);
+      }
+      await refresh(); setEditMedia(null); setMediaForm(blankMedia); setFile(null); setProgress(0); setMessage("Media saved.");
     } catch (err) {
       if (newPath) await supabase.storage.from("journey-media").remove([newPath]);
       setMessage(errorText(err));
@@ -98,6 +108,34 @@ function Admin() {
   async function deleteMedia(item: MediaItem) {
     if (!confirm(`Delete “${item.title}” and its uploaded file? This cannot be undone.`)) return;
     try { await removeMedia(item); await refresh(); setMessage("Media deleted."); } catch (err) { setMessage(errorText(err)); }
+  }
+  async function moveJourney(item: JourneyEntry, direction: -1 | 1) {
+    const ordered = [...journey].sort((a, b) => a.sort_order - b.sort_order);
+    const index = ordered.findIndex(entry => entry.id === item.id);
+    const adjacent = ordered[index + direction];
+    if (!adjacent) return;
+    setBusy(true); setMessage("");
+    try {
+      await Promise.all([
+        saveJourney(item.id, journeyDraft(item, adjacent.sort_order)),
+        saveJourney(adjacent.id, journeyDraft(adjacent, item.sort_order)),
+      ]);
+      await refresh(); setMessage("Timeline order updated.");
+    } catch (err) { setMessage(errorText(err)); } finally { setBusy(false); }
+  }
+  async function moveMedia(item: MediaItem, direction: -1 | 1) {
+    const ordered = [...media].sort((a, b) => a.sort_order - b.sort_order);
+    const index = ordered.findIndex(entry => entry.id === item.id);
+    const adjacent = ordered[index + direction];
+    if (!adjacent) return;
+    setBusy(true); setMessage("");
+    try {
+      await Promise.all([
+        saveMedia(item.id, mediaDraft(item, adjacent.sort_order)),
+        saveMedia(adjacent.id, mediaDraft(adjacent, item.sort_order)),
+      ]);
+      await refresh(); setMessage("Gallery order updated.");
+    } catch (err) { setMessage(errorText(err)); } finally { setBusy(false); }
   }
   function openJourney(item?: JourneyEntry) {
     setEditJourney(item?.id || "new");
@@ -114,8 +152,8 @@ function Admin() {
       {stage === "login" && <div className="mx-auto max-w-md"><p className="section-kicker">Private access</p><h1 className="section-heading mt-3">{creating ? "Create owner account" : "Welcome back."}</h1><p className="mt-4 text-sm leading-7 text-muted-foreground">Only the authorized SD Infotech owner can manage this album. Confirm your email before signing in.</p><form onSubmit={signIn} className="mt-8 grid gap-4"><label className="grid gap-2 text-sm">Email<input className="form-field" type="email" required autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} /></label><label className="grid gap-2 text-sm">Password<input className="form-field" type="password" required minLength={6} autoComplete={creating ? "new-password" : "current-password"} value={password} onChange={e => setPassword(e.target.value)} /></label><Button disabled={busy} type="submit">{creating ? "Create account" : "Sign in"}</Button></form><Button variant="link" className="mt-4 px-0" onClick={() => { setCreating(!creating); setMessage(""); }}>{creating ? "Already have an account? Sign in" : "Set up owner account"}</Button></div>}
       {stage === "claim" && <div className="mx-auto max-w-lg"><p className="section-kicker">Owner access</p><h1 className="section-heading mt-3">Verify your access.</h1><p className="mt-4 leading-7 text-muted-foreground">The first confirmed sign-in with the designated owner email can activate the administrator role. Other accounts cannot edit this portfolio.</p><Button className="mt-7" disabled={busy} onClick={claim}>Activate owner access</Button></div>}
       {stage === "dashboard" && <><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="section-kicker">Content studio</p><h1 className="section-heading mt-3">The journey, yours to shape.</h1><p className="mt-3 text-muted-foreground">{media.length} media items · {journey.length} milestones</p></div><Button onClick={() => tab === "media" ? openMedia() : openJourney()}><Plus /> Add {tab === "media" ? "media" : "milestone"}</Button></div><div className="mt-10 flex gap-2 border-b border-border pb-3"><Button variant={tab === "media" ? "default" : "ghost"} onClick={() => setTab("media")}>Gallery</Button><Button variant={tab === "journey" ? "default" : "ghost"} onClick={() => setTab("journey")}>Timeline</Button></div>
-        {tab === "media" && <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{media.map(item => <article key={item.id} className="overflow-hidden rounded-md border border-border bg-card"><div className="flex aspect-video items-center justify-center bg-secondary text-primary"><ImagePlus className="size-8" /></div><div className="p-4"><div className="flex justify-between gap-3"><strong className="font-display">{item.title}</strong><span className="text-xs text-muted-foreground">{item.published ? "Published" : "Draft"}</span></div><p className="mt-1 text-sm text-muted-foreground">{item.is_profile_photo ? "Profile portrait · " : ""}{item.media_type} · Position {item.sort_order}</p><div className="mt-4 flex gap-2"><Button variant="outline" size="sm" onClick={() => openMedia(item)}>Edit</Button><Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete ${item.title}`} onClick={() => void deleteMedia(item)}><Trash2 /></Button></div></div></article>)}{media.length === 0 && <p className="text-muted-foreground">No photos or videos yet. Add the first memory.</p>}</div>}
-        {tab === "journey" && <div className="mt-7 grid gap-3">{journey.map(item => <article key={item.id} className="flex flex-wrap items-center justify-between gap-4 border-b border-border py-4"><div><p className="section-kicker">{item.date_label || "Milestone"} · {item.published ? "Published" : "Draft"}</p><strong className="font-display text-lg">{item.title}</strong><p className="text-sm text-muted-foreground">Position {item.sort_order}</p></div><div className="flex gap-2"><Button variant="outline" size="sm" onClick={() => openJourney(item)}>Edit</Button><Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete ${item.title}`} onClick={() => void deleteJourney(item)}><Trash2 /></Button></div></article>)}{journey.length === 0 && <p className="text-muted-foreground">No milestones yet. The public timeline shows its introductory story until you add one.</p>}</div>}
+        {tab === "media" && <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{media.map((item, index) => <article key={item.id} className="overflow-hidden rounded-md border border-border bg-card">{mediaUrls[item.id] ? item.media_type === "video" ? <video src={mediaUrls[item.id]} className="aspect-video w-full bg-secondary object-cover" preload="metadata" muted /> : <img src={mediaUrls[item.id]} alt={item.alt_text || item.title} className="aspect-video w-full bg-secondary object-cover" loading="lazy" /> : <div className="flex aspect-video items-center justify-center bg-secondary text-primary"><ImagePlus className="size-8" /></div>}<div className="p-4"><div className="flex justify-between gap-3"><strong className="font-display">{item.title}</strong><span className="text-xs text-muted-foreground">{item.published ? "Published" : "Draft"}</span></div><p className="mt-1 text-sm text-muted-foreground">{item.is_profile_photo ? "Profile portrait · " : ""}{item.media_type} · Position {item.sort_order}</p><div className="mt-4 flex flex-wrap gap-2"><Button variant="outline" size="sm" onClick={() => openMedia(item)}>Edit</Button><Button variant="ghost" size="icon" disabled={busy || index === 0} aria-label={`Move ${item.title} earlier`} title="Move earlier" onClick={() => void moveMedia(item, -1)}><ArrowUp /></Button><Button variant="ghost" size="icon" disabled={busy || index === media.length - 1} aria-label={`Move ${item.title} later`} title="Move later" onClick={() => void moveMedia(item, 1)}><ArrowDown /></Button><Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete ${item.title}`} onClick={() => void deleteMedia(item)}><Trash2 /></Button></div></div></article>)}{media.length === 0 && <p className="text-muted-foreground">No photos or videos yet. Add the first memory.</p>}</div>}
+        {tab === "journey" && <div className="mt-7 grid gap-3">{journey.map((item, index) => <article key={item.id} className="flex flex-wrap items-center justify-between gap-4 border-b border-border py-4"><div><p className="section-kicker">{item.date_label || "Milestone"} · {item.published ? "Published" : "Draft"}</p><strong className="font-display text-lg">{item.title}</strong><p className="text-sm text-muted-foreground">Position {item.sort_order}</p></div><div className="flex gap-2"><Button variant="outline" size="sm" onClick={() => openJourney(item)}>Edit</Button><Button variant="ghost" size="icon" disabled={busy || index === 0} aria-label={`Move ${item.title} earlier`} title="Move earlier" onClick={() => void moveJourney(item, -1)}><ArrowUp /></Button><Button variant="ghost" size="icon" disabled={busy || index === journey.length - 1} aria-label={`Move ${item.title} later`} title="Move later" onClick={() => void moveJourney(item, 1)}><ArrowDown /></Button><Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete ${item.title}`} onClick={() => void deleteJourney(item)}><Trash2 /></Button></div></article>)}{journey.length === 0 && <p className="text-muted-foreground">No milestones yet. The public timeline shows its introductory story until you add one.</p>}</div>}
       </>}
       {message && <p role="status" className="mt-5 rounded-md border border-border bg-secondary p-3 text-sm">{message}</p>}
     </main>
@@ -127,3 +165,5 @@ function Admin() {
 }
 function Field({ label, value, onChange, required, multiline, type = "text" }: { label: string; value: string; onChange: (value: string) => void; required?: boolean; multiline?: boolean; type?: string }) { return <label className="grid gap-2 text-sm font-medium"><span>{label}</span>{multiline ? <textarea className="form-field" value={value} required={required} onChange={e => onChange(e.target.value)} /> : <input className="form-field" type={type} value={value} required={required} onChange={e => onChange(e.target.value)} />}</label>; }
 function errorText(err: unknown) { return err instanceof Error ? err.message : "Something went wrong. Please try again."; }
+function journeyDraft(item: JourneyEntry, sortOrder: number): JourneyForm { return { title: item.title, summary: item.summary, date_label: item.date_label, location: item.location, details: item.details, sort_order: sortOrder, published: item.published }; }
+function mediaDraft(item: MediaItem, sortOrder: number): MediaForm { return { title: item.title, caption: item.caption, alt_text: item.alt_text, date_label: item.date_label, location: item.location, tags: item.tags, sort_order: sortOrder, published: item.published, is_profile_photo: item.is_profile_photo, media_type: item.media_type, storage_path: item.storage_path, external_url: item.external_url }; }
