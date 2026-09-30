@@ -1,5 +1,5 @@
-- [ ] Rebuild the public site as Sujal's cinematic journey album.
+- [ ] Finalize the public site as Sujal's light-only cinematic journey album.
 - [x] Create secure content, media, role, and storage structures.
 - [ ] Build the authenticated mobile admin dashboard and owner setup flow.
-- [ ] Verify public album, admin access, uploads, and responsive layouts.
+- [ ] Typecheck/build and visually verify the public album, admin access, uploads, and phone/tablet/desktop layouts.
 - [ ] Owner creates and confirms the intended admin account, then uploads supplied personal photos.
