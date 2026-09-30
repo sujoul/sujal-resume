@@ -51,13 +51,20 @@ export async function saveJourney(id: string | null, draft: JourneyDraft) {
 
 export async function saveMedia(id: string | null, draft: MediaDraft) {
   if (draft.is_profile_photo) {
-    const clear = await supabase.from("media_items").update({ is_profile_photo: false }).eq("is_profile_photo", true);
+    let clearQuery = supabase.from("media_items").update({ is_profile_photo: false }).eq("is_profile_photo", true);
+    if (id) clearQuery = clearQuery.neq("id", id);
+    const clear = await clearQuery;
     if (clear.error) throw clear.error;
   }
   const result = id
     ? await supabase.from("media_items").update(draft as TablesUpdate<"media_items">).eq("id", id)
     : await supabase.from("media_items").insert(draft);
   if (result.error) throw result.error;
+}
+
+export async function updateMediaOrder(id: string, sortOrder: number) {
+  const { error } = await supabase.from("media_items").update({ sort_order: sortOrder }).eq("id", id);
+  if (error) throw error;
 }
 
 export async function removeJourney(id: string) {
