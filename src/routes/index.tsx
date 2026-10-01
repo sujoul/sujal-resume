@@ -97,7 +97,7 @@ function JourneyCarousel({ album, urls }: { album: MediaItem[]; urls: Record<str
           const placeholder = album.length ? null : entry as typeof MEMORY_PLACEHOLDERS[number];
           const distance = Math.abs(index - activeIndex);
           return <article key={item?.id || placeholder?.title} className={`memory-card carousel-slide ${index === activeIndex ? "is-active" : ""}`} aria-hidden={distance > 1} onClick={() => goTo(index)}>
-            {item ? urls[item.id] ? item.media_type === "video" ? <video src={urls[item.id]} controls={index === activeIndex} preload="metadata" aria-label={item.alt_text || item.title} /> : <img src={urls[item.id]} alt={item.alt_text || item.title} loading={index === 0 ? "eager" : "lazy"} /> : <div className="memory-placeholder"><Camera /><span>Preparing memory</span></div> : placeholder ? <MemoryPlaceholder item={placeholder} index={index} /> : null}
+            {item ? urls[item.id] ? item.media_type === "video" ? <video src={urls[item.id]} controls={index === activeIndex} preload="metadata" aria-label={item.alt_text || item.title} /> : <img src={urls[item.id]} alt={item.alt_text || item.title} loading={index === 0 ? "eager" : "lazy"} draggable={false} /> : <div className="memory-placeholder"><Camera /><span>Preparing memory</span></div> : placeholder ? <MemoryPlaceholder item={placeholder} index={index} /> : null}
             {item && <div className="memory-caption"><span>{item.date_label || item.location || `Memory ${index + 1}`}</span><p>{item.caption || item.title}</p></div>}
           </article>;
         })}
