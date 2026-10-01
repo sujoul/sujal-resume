@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, ChevronLeft, ChevronRight, GraduationCap, Mail, Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform-icon";
@@ -74,16 +74,16 @@ function JourneyCarousel({ album, urls }: { album: MediaItem[]; urls: Record<str
   const dragDistance = useRef(0);
   const goTo = useCallback((next: number) => setActiveIndex(Math.max(0, Math.min(slides.length - 1, next))), [slides.length]);
   useEffect(() => { if (activeIndex >= slides.length) setActiveIndex(Math.max(0, slides.length - 1)); }, [activeIndex, slides.length]);
-  function pointerDown(event: React.PointerEvent<HTMLDivElement>) {
+  function pointerDown(event: PointerEvent<HTMLDivElement>) {
     dragStart.current = event.clientX;
     dragDistance.current = 0;
     event.currentTarget.setPointerCapture(event.pointerId);
   }
-  function pointerMove(event: React.PointerEvent<HTMLDivElement>) {
+  function pointerMove(event: PointerEvent<HTMLDivElement>) {
     if (dragStart.current === null) return;
     dragDistance.current = event.clientX - dragStart.current;
   }
-  function pointerUp(event: React.PointerEvent<HTMLDivElement>) {
+  function pointerUp(event: PointerEvent<HTMLDivElement>) {
     if (dragStart.current === null) return;
     const distance = event.clientX - dragStart.current;
     dragStart.current = null;
@@ -91,7 +91,7 @@ function JourneyCarousel({ album, urls }: { album: MediaItem[]; urls: Record<str
   }
   return <div className="journey-carousel reveal" aria-roledescription="carousel" aria-label="Journey photo album">
     <div className="carousel-viewport" onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={() => { dragStart.current = null; }}>
-      <div className="carousel-track" style={{ transform: `translateX(calc(50% - ${activeIndex * 64}% - 32%))` }}>
+      <div className="carousel-track" style={{ "--active-index": activeIndex } as CSSProperties}>
         {slides.map((entry, index) => {
           const item = album.length ? entry as MediaItem : null;
           const placeholder = album.length ? null : entry as typeof MEMORY_PLACEHOLDERS[number];
