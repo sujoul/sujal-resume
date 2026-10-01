@@ -7,6 +7,7 @@ export const SOCIAL_LINKS = [
   { name: "X", url: "https://x.com/SD_infotech9", icon: "x" },
   { name: "GitHub", url: "https://github.com/sujoul", icon: "github" },
   { name: "Facebook", url: "https://www.facebook.com/share/1crSJ44xX8/", icon: "facebook" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/sujal-dhali-9a1b0643b?utm_source=share_via&utm_content=profile&utm_medium=member_android", icon: "linkedin" },
 ] as const;
 
 export const NAV_ITEMS = [
