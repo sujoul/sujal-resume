@@ -89,7 +89,7 @@ function JourneyCarousel({ album, urls }: { album: MediaItem[]; urls: Record<str
     dragStart.current = null;
     if (Math.abs(distance) > 45) goTo(activeIndex + (distance < 0 ? 1 : -1));
   }
-  return <div className="journey-carousel reveal" aria-roledescription="carousel" aria-label="Journey photo album">
+  return <div className="journey-carousel" aria-roledescription="carousel" aria-label="Journey photo album">
     <div className="carousel-viewport" onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={() => { dragStart.current = null; }}>
       <div className="carousel-track" style={{ "--active-index": activeIndex } as CSSProperties}>
         {slides.map((entry, index) => {
