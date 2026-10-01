@@ -13,3 +13,4 @@
 - Keep the requested scrolling portfolio on the index route with in-page navigation because its sections form one continuous presentation.
 - Store album media in the private `journey-media` bucket and expose it only through published `media_items` rows, so draft memories stay private.
 - Enforce the single SD Infotech administrator with the `user_roles` table and database policies; never infer admin access from the email in client code.
+- Keep the public album as a center-focused horizontal carousel while the profile designation remains a separate presentation flag; this prevents portrait toggles from hiding album media.

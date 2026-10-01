@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, GraduationCap, Mail, Menu, Sparkles, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, ChevronLeft, ChevronRight, GraduationCap, Mail, Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform-icon";
 import { getPublishedPortfolio, type JourneyEntry, type MediaItem } from "@/lib/portfolio-data";
@@ -64,7 +64,47 @@ function SectionTitle({ eyebrow, title, copy }: { eyebrow: string; title: string
 }
 
 function MemoryPlaceholder({ item, index }: { item: typeof MEMORY_PLACEHOLDERS[number]; index: number }) {
-  return <article className={`memory-card memory-${item.kind} reveal`}><div className="memory-placeholder"><Camera /><span>Memory {String(index + 1).padStart(2, "0")}</span></div><div className="memory-caption"><span>{item.title}</span><p>{item.caption}</p></div></article>;
+  return <><div className="memory-placeholder"><Camera /><span>Memory {String(index + 1).padStart(2, "0")}</span></div><div className="memory-caption"><span>{item.title}</span><p>{item.caption}</p></div></>;
+}
+
+function JourneyCarousel({ album, urls }: { album: MediaItem[]; urls: Record<string, string> }) {
+  const slides = album.length ? album : MEMORY_PLACEHOLDERS;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const dragStart = useRef<number | null>(null);
+  const dragDistance = useRef(0);
+  const goTo = useCallback((next: number) => setActiveIndex(Math.max(0, Math.min(slides.length - 1, next))), [slides.length]);
+  useEffect(() => { if (activeIndex >= slides.length) setActiveIndex(Math.max(0, slides.length - 1)); }, [activeIndex, slides.length]);
+  function pointerDown(event: PointerEvent<HTMLDivElement>) {
+    dragStart.current = event.clientX;
+    dragDistance.current = 0;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+  function pointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (dragStart.current === null) return;
+    dragDistance.current = event.clientX - dragStart.current;
+  }
+  function pointerUp(event: PointerEvent<HTMLDivElement>) {
+    if (dragStart.current === null) return;
+    const distance = event.clientX - dragStart.current;
+    dragStart.current = null;
+    if (Math.abs(distance) > 45) goTo(activeIndex + (distance < 0 ? 1 : -1));
+  }
+  return <div className="journey-carousel" aria-roledescription="carousel" aria-label="Journey photo album">
+    <div className="carousel-viewport" onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={() => { dragStart.current = null; }}>
+      <div className="carousel-track" style={{ "--active-index": activeIndex } as CSSProperties}>
+        {slides.map((entry, index) => {
+          const item = album.length ? entry as MediaItem : null;
+          const placeholder = album.length ? null : entry as typeof MEMORY_PLACEHOLDERS[number];
+          const distance = Math.abs(index - activeIndex);
+          return <article key={item?.id || placeholder?.title} className={`memory-card carousel-slide ${index === activeIndex ? "is-active" : ""}`} aria-hidden={distance > 1} onClick={() => goTo(index)}>
+            {item ? urls[item.id] ? item.media_type === "video" ? <video src={urls[item.id]} controls={index === activeIndex} preload="metadata" aria-label={item.alt_text || item.title} /> : <img src={urls[item.id]} alt={item.alt_text || item.title} loading={index === 0 ? "eager" : "lazy"} draggable={false} /> : <div className="memory-placeholder"><Camera /><span>Preparing memory</span></div> : placeholder ? <MemoryPlaceholder item={placeholder} index={index} /> : null}
+            {item && <div className="memory-caption"><span>{item.date_label || item.location || `Memory ${index + 1}`}</span><p>{item.caption || item.title}</p></div>}
+          </article>;
+        })}
+      </div>
+    </div>
+    {slides.length > 1 && <div className="carousel-controls"><Button variant="outline" size="icon" aria-label="Previous memory" disabled={activeIndex === 0} onClick={() => goTo(activeIndex - 1)}><ChevronLeft /></Button><div className="carousel-dots" aria-label={`Memory ${activeIndex + 1} of ${slides.length}`}>{slides.map((_, index) => <button key={index} type="button" className={index === activeIndex ? "active" : ""} aria-label={`Show memory ${index + 1}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => goTo(index)} />)}</div><Button variant="outline" size="icon" aria-label="Next memory" disabled={activeIndex === slides.length - 1} onClick={() => goTo(activeIndex + 1)}><ChevronRight /></Button></div>}
+  </div>;
 }
 
 function ProjectVisual({ theme }: { theme: string }) {
@@ -99,7 +139,7 @@ function Index() {
       <section className="journey-hero" aria-labelledby="hero-title">
         <img src={heroVisual} alt="Layered digital interfaces representing Sujal's web-building journey" className="hero-art" fetchPriority="high" />
         <div className="hero-vignette" />
-        <div className="section-wrap relative z-10 pt-36 pb-20 md:pt-44 md:pb-28">
+         <div className="section-wrap hero-content relative z-10 pt-36 pb-20 md:pt-44 md:pb-28">
           <p className="section-kicker mb-7">Personal journey · Professional direction</p>
           <h1 id="hero-title" className="hero-title max-w-5xl">I’m Sujal.<br /><span className="text-gradient">This is the journey behind the work.</span></h1>
           <p className="mt-7 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg">A growing album of memories, education, practical web projects, and the future I’m building through SD Infotech.</p>
@@ -116,7 +156,7 @@ function Index() {
       <section id="timeline" className="section-rule scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="02 / Milestones" title="The chapters connect." copy="Education, experimentation, professional focus, and what comes next—each part belongs to the same continuing story." /><div className="timeline-track">{timeline.map((entry, index) => <article key={entry.id} className="timeline-entry reveal"><span className="timeline-dot">{String(index + 1).padStart(2, "0")}</span><div><p className="section-kicker">{entry.date_label}{entry.location && ` · ${entry.location}`}</p><h3>{entry.title}</h3><p>{entry.summary}</p>{entry.details && <small>{entry.details}</small>}</div></article>)}</div></div></section>
 
       <section id="album" className="album-band scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="03 / Photo journey" title="Fragments of one unfolding life." copy="Travel, work, discipline, and ordinary moments—the photographs can change, but their place in the journey remains connected." />
-        <div className="album-grid" aria-label="Journey photo album">{album.length ? album.map((item, index) => <article key={item.id} className="memory-card reveal">{urls[item.id] ? item.media_type === "video" ? <video src={urls[item.id]} controls preload="metadata" aria-label={item.alt_text || item.title} /> : <img src={urls[item.id]} alt={item.alt_text || item.title} loading="lazy" /> : <div className="memory-placeholder"><Camera /><span>Preparing memory</span></div>}<div className="memory-caption"><span>{item.date_label || item.location || `Memory ${index + 1}`}</span><p>{item.caption || item.title}</p></div></article>) : MEMORY_PLACEHOLDERS.map((item, index) => <MemoryPlaceholder key={item.title} item={item} index={index} />)}</div>
+         <JourneyCarousel album={album} urls={urls} />
          <div className="profile-journey reveal"><div className="profile-orbit"><div className="profile-circle">{profile && urls[profile.id] ? <img src={urls[profile.id]} alt={profile.alt_text || "Portrait of Sujal"} loading="lazy" /> : <span>S</span>}</div></div><div><p className="section-kicker">Portrait / The person within the album</p><h3>The story keeps moving.</h3><p>{profile ? profile.caption : "A portrait will complete this part of the journey soon."}</p></div></div>
       </div></section>
 
