@@ -1,0 +1,8 @@
+[build]
+  command = "bun run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # @lovable.dev/vite-tanstack-config falls back to a Cloudflare target; build for Netlify instead.
+  NITRO_PRESET = "netlify"
