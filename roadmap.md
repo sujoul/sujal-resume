@@ -1,7 +1,6 @@
 - [x] Finalize the public site as Sujal's light-only cinematic journey album.
 - [x] Create secure content, media, role, and storage structures.
-- [x] Build the authenticated mobile admin dashboard and owner setup flow.
-- [x] Typecheck/build and visually verify the public album, admin sign-in, interactions, and phone/tablet/desktop layouts.
-- [ ] Owner creates and confirms the intended admin account, then uploads supplied personal photos.
+- [x] Remove the frontend admin panel; administration is done directly in the backend dashboard.
 - [x] Keep every published photo in the album while treating the profile portrait as a separate presentation.
 - [x] Add a center-focused journey carousel with adjacent previews, arrows, drag, and mobile swipe.
+- [ ] Owner uploads personal photos and manages content via the backend dashboard.
