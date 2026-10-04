@@ -15,3 +15,4 @@
 - Administration happens only in the backend dashboard (user_roles, journey_entries, media_items, journey-media storage); the site ships no frontend admin UI, and the browser module only reads published content.
 - Keep admin-only write access enforced by `user_roles` + RLS policies so dashboard administration stays secure; never infer admin access in client code.
 - Keep the public album as a center-focused horizontal carousel while the profile designation remains a separate presentation flag; this prevents portrait toggles from hiding album media.
+- Derive the browser favicon from the published profile image at runtime with a light static fallback, so dashboard portrait changes need no code deployment.

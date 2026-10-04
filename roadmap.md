@@ -3,4 +3,5 @@
 - [x] Remove the frontend admin panel; administration is done directly in the backend dashboard.
 - [x] Keep every published photo in the album while treating the profile portrait as a separate presentation.
 - [x] Add a center-focused journey carousel with adjacent previews, arrows, drag, and mobile swipe.
+- [x] Derive the favicon from the published portrait with a light placeholder when no portrait is available.
 - [ ] Owner uploads personal photos and manages content via the backend dashboard.
