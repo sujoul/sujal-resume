@@ -120,8 +120,7 @@ function Index() {
     getPublishedPortfolio().then(async data => {
       setJourney(data.journey); setMedia(data.media);
       const pairs = await Promise.all(data.media.map(async item => {
-        if (item.external_url) return [item.id, item.external_url] as const;
-        if (!item.storage_path) return [item.id, ""] as const;
+        if (!item.storage_path) return [item.id, item.external_url || ""] as const;
         const { data: signed } = await import("@/integrations/supabase/client").then(({ supabase }) => supabase.storage.from("journey-media").createSignedUrl(item.storage_path as string, 3600));
         return [item.id, signed?.signedUrl || ""] as const;
       }));
@@ -131,6 +130,43 @@ function Index() {
   const timeline = journey.length ? journey : FALLBACK_JOURNEY;
   const profile = media.find(item => item.is_profile_photo && item.media_type === "image");
   const album = useMemo(() => media, [media]);
+
+  useEffect(() => {
+    const portraitUrl = profile ? urls[profile.id] : undefined;
+    const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!icon) return;
+    icon.href = "/favicon.svg";
+    icon.type = "image/svg+xml";
+    if (!portraitUrl) return;
+
+    let cancelled = false;
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      if (cancelled) return;
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 96;
+        const context = canvas.getContext("2d");
+        if (!context) return;
+        const crop = Math.min(image.naturalWidth, image.naturalHeight);
+        const x = (image.naturalWidth - crop) / 2;
+        const y = Math.max(0, (image.naturalHeight - crop) * .24);
+        context.fillStyle = "#edf5ff";
+        context.fillRect(0, 0, 96, 96);
+        context.beginPath();
+        context.arc(48, 48, 46, 0, Math.PI * 2);
+        context.clip();
+        context.drawImage(image, x, y, crop, crop, 2, 2, 92, 92);
+        icon.href = canvas.toDataURL("image/png");
+        icon.type = "image/png";
+      } catch {
+        // Keep the light placeholder when an external photo disallows canvas access.
+      }
+    };
+    image.src = portraitUrl;
+    return () => { cancelled = true; };
+  }, [profile?.id, urls]);
 
   return <div className="site-shell" id="top">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
