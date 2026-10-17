@@ -11,10 +11,9 @@
 
 - Keep portfolio copy, project labels, contact email, and placeholder social URLs in `src/lib/site-content.ts` so personal details are easy to update without searching the UI.
 - Keep the requested scrolling portfolio on the index route with in-page navigation because its sections form one continuous presentation.
-- Store album media in the private `journey-media` bucket and expose it only through published `media_items` rows, so draft memories stay private.
 - Administration happens only in the backend dashboard (user_roles, journey_entries, media_items, journey-media storage); the site ships no frontend admin UI, and the browser module only reads published content.
 - Keep admin-only write access enforced by `user_roles` + RLS policies so dashboard administration stays secure; never infer admin access in client code.
 - Keep the public album as a center-focused horizontal carousel while the profile designation remains a separate presentation flag; this prevents portrait toggles from hiding album media.
-- Derive the browser favicon from the published profile image at runtime with a light static fallback, so dashboard portrait changes need no code deployment.
 - Retain `.lovable/project.json` until its removal is documented as safe; template metadata is not public branding and sync must remain intact.
 - Album and profile photos are static files in public/images/ referenced from src/lib/site-content.ts; the owner chose bundled assets over storage so photos deploy with the site.
+- Derive the favicon at runtime from the static profile photo, falling back to public/site-icon.svg.
