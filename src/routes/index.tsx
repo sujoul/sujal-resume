@@ -135,7 +135,7 @@ function Index() {
     const portraitUrl = profile ? urls[profile.id] : undefined;
     const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (!icon) return;
-    icon.href = "/favicon.svg";
+    icon.href = "/site-icon.svg";
     icon.type = "image/svg+xml";
     if (!portraitUrl) return;
 
