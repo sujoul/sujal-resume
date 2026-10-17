@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { ArrowDown, ArrowUp, ArrowUpRight, BriefcaseBusiness, Camera, ChevronLeft, ChevronRight, GraduationCap, Mail, Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform-icon";
-import { getPublishedPortfolio, type JourneyEntry, type MediaItem } from "@/lib/portfolio-data";
-import { BRAND, CONTACT_EMAIL, FALLBACK_JOURNEY, MEMORY_PLACEHOLDERS, NAV_ITEMS, PROJECTS, SOCIAL_LINKS } from "@/lib/site-content";
+import { getPublishedPortfolio, type JourneyEntry } from "@/lib/portfolio-data";
+import { BRAND, CONTACT_EMAIL, FALLBACK_JOURNEY, GALLERY_PHOTOS, NAV_ITEMS, PROFILE_PHOTO, PROJECTS, SOCIAL_LINKS } from "@/lib/site-content";
 import heroVisual from "@/assets/developer-visual.jpg";
 
 export const Route = createFileRoute("/")({
@@ -162,8 +162,8 @@ function Index() {
       <section id="timeline" className="section-rule scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="02 / Milestones" title="The chapters connect." copy="Education, experimentation, professional focus, and what comes next—each part belongs to the same continuing story." /><div className="timeline-track">{timeline.map((entry, index) => <article key={entry.id} className="timeline-entry reveal"><span className="timeline-dot">{String(index + 1).padStart(2, "0")}</span><div><p className="section-kicker">{entry.date_label}{entry.location && ` · ${entry.location}`}</p><h3>{entry.title}</h3><p>{entry.summary}</p>{entry.details && <small>{entry.details}</small>}</div></article>)}</div></div></section>
 
       <section id="album" className="album-band scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="03 / Photo journey" title="Fragments of one unfolding life." copy="Travel, work, discipline, and ordinary moments—the photographs can change, but their place in the journey remains connected." />
-         <JourneyCarousel album={album} urls={urls} />
-         <div className="profile-journey reveal"><div className="profile-orbit"><div className="profile-circle">{profile && urls[profile.id] ? <img src={urls[profile.id]} alt={profile.alt_text || "Portrait of Sujal"} loading="lazy" /> : <span>S</span>}</div></div><div><p className="section-kicker">Portrait / The person within the album</p><h3>The story keeps moving.</h3><p>{profile ? profile.caption : "A portrait will complete this part of the journey soon."}</p></div></div>
+         <JourneyCarousel />
+         <div className="profile-journey reveal"><div className="profile-orbit"><div className="profile-circle">{profileOk ? <img src={PROFILE_PHOTO.src} alt={PROFILE_PHOTO.alt} loading="lazy" onError={() => setProfileOk(false)} /> : <span>S</span>}</div></div><div><p className="section-kicker">Portrait / The person within the album</p><h3>The story keeps moving.</h3></div></div>
       </div></section>
 
       <section id="work" className="section-rule scroll-mt-24"><div className="section-wrap section-space"><SectionTitle eyebrow="04 / Web work" title="Ideas turned into practical digital work." copy="These examples are practice projects and concepts, presented honestly—not as commissioned client work." /><div className="project-grid">{PROJECTS.map(project => <article key={project.name} className="project-card reveal"><ProjectVisual theme={project.theme} /><div className="p-6"><p className="section-kicker">{project.number} · {project.category}</p><h3 className="mt-4 font-display text-2xl font-semibold">{project.name}</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">{project.description}</p></div></article>)}</div><div className="work-note reveal"><span>Project pricing</span><strong>Depends on the deal/project work.</strong></div></div></section>
