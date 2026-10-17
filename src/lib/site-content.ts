@@ -28,7 +28,7 @@ export const PROJECTS = [
 export const PROFILE_PHOTO = { src: "/images/profile-beach.jpg", alt: "Sujal standing on the beach" };
 
 export const GALLERY_PHOTOS = [
-  { src: "/images/01-itc-bengaluru.jpg", title: "A Stay in Bengaluru", location: "Bengaluru, Karnataka", alt: "Sujal at ITC Hotel, Bengaluru" },
+  { src: "/images/01-itc-bengaluru.jpg", title: "A Work Visit to ITC Bengaluru", location: "Bengaluru, Karnataka", alt: "Sujal during a professional visit to ITC Bengaluru" },
   { src: "/images/02-mysuru-forest.jpg", title: "A Quiet Walk Among the Trees", location: "Mysuru, Karnataka", alt: "Sujal walking in a forest near Mysuru" },
   { src: "/images/03-maldives-sea.jpg", title: "Ocean Views & Island Serenity", location: "Maldives", alt: "Sea view in the Maldives" },
   { src: "/images/04-udupi-beach.jpg", title: "Golden Sands, Coastal Memories", location: "Udupi, Karnataka", alt: "Sujal on the beach in Udupi" },
