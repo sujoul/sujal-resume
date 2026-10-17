@@ -24,11 +24,15 @@ export const PROJECTS = [
   { number: "03", name: "Developer Portfolio", category: "Personal portfolio concept", description: "A personal presentation concept balancing identity, project stories, and a direct path to connect.", theme: "portfolio" },
 ] as const;
 
-export const MEMORY_PLACEHOLDERS = [
-  { title: "Beach memory", caption: "First time on the beach.", kind: "beach" },
-  { title: "Gym memory", caption: "Showing up, one session at a time.", kind: "gym" },
-  { title: "Travel memory", caption: "A pause along the journey.", kind: "temple" },
-  { title: "Work memory", caption: "A day at ITC — learning on the job.", kind: "work" },
+// Static photos bundled with the site. Drop the image files into public/images/ using these exact names.
+export const PROFILE_PHOTO = { src: "/images/profile-beach.jpg", alt: "Sujal standing on the beach" };
+
+export const GALLERY_PHOTOS = [
+  { src: "/images/01-itc-bengaluru.jpg", title: "A Stay in Bengaluru", location: "Bengaluru, Karnataka", alt: "Sujal at ITC Hotel, Bengaluru" },
+  { src: "/images/02-mysuru-forest.jpg", title: "A Quiet Walk Among the Trees", location: "Mysuru, Karnataka", alt: "Sujal walking in a forest near Mysuru" },
+  { src: "/images/03-maldives-sea.jpg", title: "Ocean Views & Island Serenity", location: "Maldives", alt: "Sea view in the Maldives" },
+  { src: "/images/04-udupi-beach.jpg", title: "Golden Sands, Coastal Memories", location: "Udupi, Karnataka", alt: "Sujal on the beach in Udupi" },
+  { src: "/images/05-gym-mirror.jpg", title: "Consistency Over Motivation", location: "Fitness", alt: "Sujal's gym mirror selfie" },
 ] as const;
 
 export const FALLBACK_JOURNEY = [
