@@ -4,4 +4,6 @@
 - [x] Keep every published photo in the album while treating the profile portrait as a separate presentation.
 - [x] Add a center-focused journey carousel with adjacent previews, arrows, drag, and mobile swipe.
 - [x] Derive the favicon from the published portrait with a light placeholder when no portrait is available.
+- [x] Replace the illustrated favicon with a neutral asset and remove the obsolete frontend-admin plan.
+- [ ] Hide the published platform badge — blocked by the platform's plan/editor permission requirement.
 - [ ] Owner uploads personal photos and manages content via the backend dashboard.
