@@ -9,9 +9,9 @@ import heroVisual from "@/assets/developer-visual.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "Sujal's Journey — SD Infotech" },
+    { title: "Sujal's Journey · Portfolio by SD Infotech" },
     { name: "description", content: "A personal journey album and professional portfolio by Sujal—memories, education, practical web work, and the story behind SD Infotech." },
-    { property: "og:title", content: "Sujal's Journey — SD Infotech" },
+    { property: "og:title", content: "Sujal's Journey · Portfolio by SD Infotech" },
     { property: "og:description", content: "Memories, milestones, and practical web work from Sujal's continuing journey." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
