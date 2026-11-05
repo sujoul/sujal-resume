@@ -5,5 +5,6 @@
 - [x] Add a center-focused journey carousel with adjacent previews, arrows, drag, and mobile swipe.
 - [x] Derive the favicon from the published portrait with a light placeholder when no portrait is available.
 - [x] Replace the illustrated favicon with a neutral asset and remove the obsolete frontend-admin plan.
+- [x] Point the browser tab icon at a swappable public/favicon.png file so a supplied portrait replaces it with no code change.
 - [ ] Hide the published platform badge — blocked by the platform's plan/editor permission requirement.
 - [ ] Owner uploads personal photos and manages content via the backend dashboard.
