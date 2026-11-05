@@ -16,4 +16,4 @@
 - Keep the public album as a center-focused horizontal carousel while the profile designation remains a separate presentation flag; this prevents portrait toggles from hiding album media.
 - Retain `.lovable/project.json` until its removal is documented as safe; template metadata is not public branding and sync must remain intact.
 - Album and profile photos are static files in public/images/ referenced from src/lib/site-content.ts; the owner chose bundled assets over storage so photos deploy with the site.
-- Derive the favicon at runtime from the static profile photo, falling back to public/site-icon.svg.
+- Keep the browser tab icon at public/favicon.png, referenced from the root route head, so a supplied portrait can replace that one file without code changes; derive it at runtime from the static profile photo when one is available.
