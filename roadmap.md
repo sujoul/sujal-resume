@@ -8,3 +8,5 @@
 - [x] Point the browser tab icon at a swappable public/favicon.png file so a supplied portrait replaces it with no code change.
 - [ ] Hide the published platform badge — blocked by the platform's plan/editor permission requirement.
 - [ ] Owner uploads personal photos and manages content via the backend dashboard.
+- [x] Add public, read-only MCP tools for public portfolio copy and published milestones without changing content permissions.
+- [x] Add page-local read tools for the homepage's visible milestones, project cards, and album captions.

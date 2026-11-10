@@ -17,3 +17,4 @@
 - Retain `.lovable/project.json` until its removal is documented as safe; template metadata is not public branding and sync must remain intact.
 - Album and profile photos are static files in public/images/ referenced from src/lib/site-content.ts; the owner chose bundled assets over storage so photos deploy with the site.
 - Keep the browser tab icon at public/favicon.png, referenced from the root route head, so a supplied portrait can replace that one file without code changes; derive it at runtime from the static profile photo when one is available.
+- Keep app-hosted MCP tools read-only and limited to portfolio copy already public on the site; query published milestone rows through anonymous RLS, never expose media storage paths or private rows, and keep page-local WebMCP tools separate from the server catalog.
