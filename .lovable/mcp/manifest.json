@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "sdk_version": "3.4.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "sujal-resume",
+      "version": "0.1.0",
+      "title": "Sujal resume"
+    },
+    "tools": [
+      {
+        "name": "get_public_portfolio",
+        "title": "Get public portfolio",
+        "description": "Summarize the public portfolio, contact address, social profiles, and practice project concepts.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "untrustedContentHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_published_milestones",
+        "title": "List published milestones",
+        "description": "List public journey milestones in display order; unpublished rows are not returned.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "untrustedContentHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_album_captions",
+        "title": "List album captions",
+        "description": "List the portfolio's public album captions and locations without exposing image files or storage paths.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false,
+          "untrustedContentHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
