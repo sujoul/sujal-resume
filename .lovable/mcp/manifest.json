@@ -19,8 +19,7 @@
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
-          "openWorldHint": false,
-          "untrustedContentHint": true
+          "openWorldHint": false
         },
         "inputSchema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -37,8 +36,7 @@
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
-          "openWorldHint": false,
-          "untrustedContentHint": true
+          "openWorldHint": true
         },
         "inputSchema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -55,8 +53,7 @@
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
-          "openWorldHint": false,
-          "untrustedContentHint": true
+          "openWorldHint": false
         },
         "inputSchema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
