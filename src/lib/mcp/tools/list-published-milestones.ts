@@ -1,4 +1,5 @@
 import { defineTool } from "@lovable.dev/mcp-js";
+import { FALLBACK_JOURNEY } from "../../site-content";
 import { supabaseAnon } from "../supabase";
 
 export default defineTool({
@@ -16,19 +17,25 @@ export default defineTool({
       .order("sort_order")
       .limit(100);
 
-    if (error) {
-      return { content: [{ type: "text", text: "Published milestones are temporarily unavailable." }], isError: true };
-    }
-
-    const milestones = (data ?? []).map(({ id, title, summary, date_label, location, details, sort_order }) => ({
-      id,
-      title,
-      summary,
-      date_label,
-      location,
-      details,
-      sort_order,
-    }));
+    const milestones = error || !data?.length
+      ? FALLBACK_JOURNEY.map(({ id, title, summary, date_label, location, details, sort_order }) => ({
+          id,
+          title,
+          summary,
+          date_label,
+          location,
+          details,
+          sort_order,
+        }))
+      : data.map(({ id, title, summary, date_label, location, details, sort_order }) => ({
+          id,
+          title,
+          summary,
+          date_label,
+          location,
+          details,
+          sort_order,
+        }));
 
     return {
       content: [{ type: "text", text: milestones.length ? milestones.map((item) => `${item.date_label}: ${item.title}`).join("\n") : "No published milestones are available." }],
