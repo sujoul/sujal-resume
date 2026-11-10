@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform-icon";
 import { getPublishedPortfolio, type JourneyEntry } from "@/lib/portfolio-data";
 import { BRAND, CONTACT_EMAIL, FALLBACK_JOURNEY, GALLERY_PHOTOS, NAV_ITEMS, PROFILE_PHOTO, PROJECTS, SOCIAL_LINKS } from "@/lib/site-content";
+import { runWebMCPTool } from "@/lib/webmcp-telemetry";
+import { useWebMCP } from "use-webmcp-tool";
 import heroVisual from "@/assets/developer-visual.jpg";
 
 export const Route = createFileRoute("/")({
@@ -110,6 +112,33 @@ function Index() {
     getPublishedPortfolio().then(data => setJourney(data.journey)).catch(() => undefined);
   }, []);
   const timeline = journey.length ? journey : FALLBACK_JOURNEY;
+
+  useWebMCP({
+    name: "read_journey_timeline",
+    description: "Read the journey milestones currently shown on Sujal's portfolio page.",
+    annotations: { readOnlyHint: true, untrustedContentHint: true },
+    execute: () => runWebMCPTool("read_journey_timeline", () =>
+      timeline.map((entry) => `${entry.date_label}${entry.location ? ` · ${entry.location}` : ""}: ${entry.title} — ${entry.summary}`).join("\n"),
+    ),
+  });
+
+  useWebMCP({
+    name: "list_project_concepts",
+    description: "List the practice project concepts displayed in the web work section.",
+    annotations: { readOnlyHint: true, untrustedContentHint: true },
+    execute: () => runWebMCPTool("list_project_concepts", () =>
+      PROJECTS.map((project) => `${project.number}. ${project.name} (${project.category}): ${project.description}`).join("\n"),
+    ),
+  });
+
+  useWebMCP({
+    name: "list_album_captions",
+    description: "List the public album captions and locations shown on this page without accessing image files.",
+    annotations: { readOnlyHint: true, untrustedContentHint: true },
+    execute: () => runWebMCPTool("list_album_captions", () =>
+      GALLERY_PHOTOS.map((photo) => `${photo.title} — ${photo.location}`).join("\n"),
+    ),
+  });
 
   useEffect(() => {
     const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
