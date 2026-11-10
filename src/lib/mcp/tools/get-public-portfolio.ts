@@ -6,7 +6,7 @@ export default defineTool({
   title: "Get public portfolio",
   description: "Summarize the public portfolio, contact address, social profiles, and practice project concepts.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false, untrustedContentHint: true },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
     const projects = PROJECTS.map(({ number, name, category, description }) => ({ number, name, category, description }));
     const socialProfiles = SOCIAL_LINKS.map(({ name, url }) => ({ name, url }));

@@ -6,7 +6,7 @@ export default defineTool({
   title: "List album captions",
   description: "List the portfolio's public album captions and locations without exposing image files or storage paths.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false, untrustedContentHint: true },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
     const entries = GALLERY_PHOTOS.map(({ title, location }) => ({ title, location }));
     return {

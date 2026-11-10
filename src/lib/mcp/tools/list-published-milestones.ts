@@ -6,7 +6,7 @@ export default defineTool({
   title: "List published milestones",
   description: "List public journey milestones in display order; unpublished rows are not returned.",
   inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false, untrustedContentHint: true },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
   handler: async () => {
     const supabase = supabaseAnon();
     const { data, error } = await supabase
