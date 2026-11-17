@@ -10,3 +10,6 @@
 - [ ] Owner uploads personal photos and manages content via the backend dashboard.
 - [x] Add public, read-only MCP tools for public portfolio copy and published milestones without changing content permissions.
 - [x] Add page-local read tools for the homepage's visible milestones, project cards, and album captions.
+- [x] Bundle the four clearly identified uploaded originals and connect them to the existing album.
+- [ ] Add the ocean image after the user confirms which uploaded photo it is.
+- [ ] Add the Google Ananta Bengaluru image after the user provides it.

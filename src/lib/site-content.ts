@@ -28,10 +28,9 @@ export const PROJECTS = [
 export const PROFILE_PHOTO = { src: "/images/profile-beach.jpg", alt: "Sujal standing on the beach" };
 
 export const GALLERY_PHOTOS = [
-  { src: "/images/01-itc-bengaluru.jpg", title: "A Work Visit to ITC Bengaluru", location: "Bengaluru, Karnataka", alt: "Sujal during a professional visit to ITC Bengaluru" },
-  { src: "/images/02-mysuru-forest.jpg", title: "A Quiet Walk Among the Trees", location: "Mysuru, Karnataka", alt: "Sujal walking in a forest near Mysuru" },
-  { src: "/images/03-maldives-sea.jpg", title: "Ocean Views & Island Serenity", location: "Maldives", alt: "Sea view in the Maldives" },
-  { src: "/images/04-udupi-beach.jpg", title: "Golden Sands, Coastal Memories", location: "Udupi, Karnataka", alt: "Sujal on the beach in Udupi" },
+  { src: "/images/01-itc-bengaluru.jpg", title: "A Work Visit at ITC Bengaluru and BIOCON Pharmaceutical", location: "Bengaluru, Karnataka", alt: "Sujal during a professional visit at the ITC Bengaluru cafeteria" },
+  { src: "/images/02-mysuru-forest.png", title: "A Quiet Walk Among the Trees", location: "Mysuru, Karnataka", alt: "Sujal standing beneath a large tree near Mysuru" },
+  { src: "/images/04-udupi-beach.png", title: "Golden Sand, Coastal Memories", location: "Udupi, Karnataka", alt: "Sujal standing on a sandy beach in Udupi" },
   { src: "/images/05-gym-mirror.jpg", title: "Consistency Over Motivation", location: "Fitness", alt: "Sujal's gym mirror selfie" },
 ] as const;
 
